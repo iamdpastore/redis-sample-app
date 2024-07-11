@@ -8,12 +8,14 @@
 </head>
 <body>
     <div class="container">
-        <h1>Vote for Your Favorite Candidate</h1>
+        <h1>Vote for Your Favorite TV Series</h1>
         <form action="/vote" method="post">
             <input type="radio" id="candidate1" name="candidate" value="Candidate1">
-            <label for="candidate1">Candidate 1</label><br>
+            <label for="candidate1">Game of Thrones</label><br>
             <input type="radio" id="candidate2" name="candidate" value="Candidate2">
-            <label for="candidate2">Candidate 2</label><br>
+            <label for="candidate2">Stranger Things</label><br>
+            <input type="radio" id="candidate3" name="candidate" value="Candidate3">
+            <label for="candidate3">The Walking Dead</label><br>
             <button type="submit">Vote</button>
         </form>
         <h2>Current Votes</h2>
@@ -22,6 +24,10 @@
                 <li>{{ candidate }}: {{ count }}</li>
             {% endfor %}
         </ul>
+        <h2>Admin</h2>
+        <form action="/clear" method="post">
+            <button type="submit" style="background-color: red;">Clear All Votes</button>
+        </form>
     </div>
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
