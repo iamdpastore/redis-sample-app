@@ -1,8 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 import redis
+import os
 
 app = Flask(__name__)
-r = redis.Redis(host='red-cq803u6ehbks7397u18g', port=6379, db=0)
+redis_url = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
+r = redis.Redis.from_url(redis_url)
 
 def get_client_ip():
     if request.headers.get('X-Forwarded-For'):
@@ -35,4 +37,4 @@ def results():
     return jsonify(votes)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=10000) # Default port for Render Web Services
+    app.run(debug=True, host='0.0.0.0', port=10000) # Default port for Render Web Services
