@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: redis-sample-app
+    runtime: python
+    plan: starter
+    buildCommand: poetry install
+    startCommand: gunicorn app:app --chdir ./poetry_flask
+    autoDeploy: false

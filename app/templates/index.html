@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Vote for Your Favorite Candidate</h1>
+        <form action="/vote" method="post">
+            <input type="radio" id="candidate1" name="candidate" value="Candidate1">
+            <label for="candidate1">Candidate 1</label><br>
+            <input type="radio" id="candidate2" name="candidate" value="Candidate2">
+            <label for="candidate2">Candidate 2</label><br>
+            <button type="submit">Vote</button>
+        </form>
+        <h2>Current Votes</h2>
+        <ul id="votes-list">
+            {% for candidate, count in votes.items() %}
+                <li>{{ candidate }}: {{ count }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>
