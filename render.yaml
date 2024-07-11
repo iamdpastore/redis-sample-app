@@ -2,7 +2,7 @@ services:
   - type: web
     name: redis-sample-app
     runtime: python
-    plan: starter
+    plan: free
     buildCommand: poetry install
-    startCommand: python -m app/app.py
+    startCommand: python app/app.py
     autoDeploy: false
