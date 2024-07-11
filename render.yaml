@@ -4,5 +4,5 @@ services:
     runtime: python
     plan: starter
     buildCommand: poetry install
-    startCommand: gunicorn app:app --chdir ./poetry_flask
+    startCommand: gunicorn app:app --chdir ./app
     autoDeploy: false
