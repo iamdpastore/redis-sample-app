@@ -23,10 +23,11 @@ def get_location(ip, retries=3):
     try:
         location = geolocator.geocode(ip)
         if location:
+            print(f"Location for IP {ip}: {location.latitude}, {location.longitude}")
             return (location.latitude, location.longitude)
     except (GeocoderTimedOut, GeocoderServiceError) as e:
         if retries > 0:
-            time.sleep(1)  # Aggiungi un ritardo di 1 secondo
+            time.sleep(1)  # add a delay before retrying
             return get_location(ip, retries - 1)
         else:
             print(f"Geocoding error for IP {ip}: {e}")
@@ -70,7 +71,13 @@ def map_view():
     m = folium.Map(location=[0, 0], zoom_start=2)
     locations = r.georadius('locations', 0, 0, 10000000, unit='km', withcoord=True)
     heat_data = [(loc[1][1], loc[1][0]) for loc in locations]
-    HeatMap(heat_data).add_to(m)
+    print(f"Heat data: {heat_data}")  # Log the heat data for debug
+
+    if heat_data:
+        HeatMap(heat_data).add_to(m)
+    else:
+        print("No data to display on the map")
+        
     return m._repr_html_()
 
 if __name__ == '__main__':
