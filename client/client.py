@@ -3,7 +3,7 @@ import random
 import os
 
 # URL dell'applicazione Flask
-BASE_URL = os.getenv('BASE_URL', 'http://127.0.0.1:10000/')
+BASE_URL = os.getenv('BASE_URL', 'https://redis-sample-app.onrender.com')
 
 # Candidati disponibili per il voto
 candidates = ['Game of Thrones', 'Stranger Things', 'The Walking Dead']
