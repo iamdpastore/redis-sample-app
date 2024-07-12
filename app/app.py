@@ -4,7 +4,7 @@ import os
 import folium
 import time
 from geopy.geocoders import Nominatim
-from geopy.exc import GeocoderTimedOut
+from geopy.exc import GeocoderTimedOut, GeocoderServiceError
 
 app = Flask(__name__)
 redis_url = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
