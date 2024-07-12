@@ -5,6 +5,7 @@ import folium
 import time
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut, GeocoderServiceError
+from folium.plugins import HeatMap
 
 app = Flask(__name__)
 redis_url = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
@@ -68,9 +69,8 @@ def clear():
 def map_view():
     m = folium.Map(location=[0, 0], zoom_start=2)
     locations = r.georadius('locations', 0, 0, 10000000, unit='km', withcoord=True)
-    for loc in locations:
-        ip, (lon, lat) = loc[0].decode('utf-8'), loc[1]
-        folium.Marker(location=[lat, lon], popup=ip).add_to(m)
+    heat_data = [(loc[1][1], loc[1][0]) for loc in locations]
+    HeatMap(heat_data).add_to(m)
     return m._repr_html_()
 
 if __name__ == '__main__':
