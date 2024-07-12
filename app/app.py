@@ -3,14 +3,15 @@ import redis
 import os
 import folium
 import time
-from geopy.geocoders import Nominatim
-from geopy.exc import GeocoderTimedOut, GeocoderServiceError
+from opencage.geocoder import OpenCageGeocode
 from folium.plugins import HeatMap
 
 app = Flask(__name__)
 redis_url = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
 r = redis.Redis.from_url(redis_url)
-geolocator = Nominatim(user_agent="vote_manager")
+
+OPENCAGE_API_KEY = os.getenv('OPENCAGE_API_KEY', 'YOUR_OPENCAGE_API_KEY')
+geocoder = OpenCageGeocode(OPENCAGE_API_KEY)
 
 def get_client_ip():
     if request.headers.get('X-Forwarded-For'):
@@ -21,13 +22,14 @@ def get_client_ip():
 
 def get_location(ip, retries=3):
     try:
-        location = geolocator.geocode(ip)
-        if location:
-            print(f"Location for IP {ip}: {location.latitude}, {location.longitude}")
-            return (location.latitude, location.longitude)
-    except (GeocoderTimedOut, GeocoderServiceError) as e:
+        result = geocoder.geocode(ip)
+        if result and len(result) > 0:
+            location = result[0]
+            print(f"Location for IP {ip}: {location['geometry']['lat']}, {location['geometry']['lng']}")  # Debug print
+            return (location['geometry']['lat'], location['geometry']['lng'])
+    except Exception as e:
         if retries > 0:
-            time.sleep(1)  # add a delay before retrying
+            time.sleep(1)  
             return get_location(ip, retries - 1)
         else:
             print(f"Geocoding error for IP {ip}: {e}")
@@ -53,6 +55,7 @@ def vote():
     location = get_location(ip)
     if location:
         r.geoadd('locations', (location[1], location[0], ip))
+        print(f"Stored location for IP {ip}: {location}")  # Debug print
 
     return redirect(url_for('index'))
 

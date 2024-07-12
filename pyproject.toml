@@ -12,6 +12,7 @@ redis = "^5.0.7"
 geopy = "^2.4.1"
 folium = "^0.17.0"
 requests = "^2.32.3"
+opencage = "^2.4.0"
 
 
 [build-system]
