@@ -11,6 +11,7 @@ flask = "^3.0.3"
 redis = "^5.0.7"
 geopy = "^2.4.1"
 folium = "^0.17.0"
+requests = "^2.32.3"
 
 
 [build-system]

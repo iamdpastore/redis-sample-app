@@ -8,6 +8,7 @@ from geopy.exc import GeocoderTimedOut
 app = Flask(__name__)
 redis_url = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
 r = redis.Redis.from_url(redis_url)
+geolocator = Nominatim(user_agent="vote_manager")
 
 def get_client_ip():
     if request.headers.get('X-Forwarded-For'):
