@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify
 import redis
 import os
 import folium
+import time
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut
 
@@ -17,13 +18,18 @@ def get_client_ip():
         ip = request.remote_addr
     return ip
 
-def get_location(ip):
+def get_location(ip, retries=3):
     try:
         location = geolocator.geocode(ip)
         if location:
             return (location.latitude, location.longitude)
-    except GeocoderTimedOut:
-        return None
+    except (GeocoderTimedOut, GeocoderServiceError) as e:
+        if retries > 0:
+            time.sleep(1)  # Aggiungi un ritardo di 1 secondo
+            return get_location(ip, retries - 1)
+        else:
+            print(f"Geocoding error for IP {ip}: {e}")
+    return None
 
 @app.route('/')
 def index():
